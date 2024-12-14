@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Transaction extends Model
 {
@@ -28,8 +29,8 @@ class Transaction extends Model
         return $this->belongsTo(Account::class, 'receiver_account');
     }
 
-    public function transaction_category()
+    public function transactionCategory()
     {
-        return $this->belongsTo(Transaction_category::class, 'category_id');
+        return $this->belongsTo(TransactionCategory::class, 'category_id');
     }
 }

@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Transaction_category extends Model
+class TransactionCategory extends Model
 {
-    use HasFactory;
  
     protected $fillable = [
         'name'
