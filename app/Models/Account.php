@@ -17,7 +17,7 @@ class Account extends Model
     ];
  
     
-    public function owner()
+    public function user()
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
