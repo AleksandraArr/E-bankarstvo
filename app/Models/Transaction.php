@@ -33,4 +33,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(TransactionCategory::class, 'category_id');
     }
+
+    protected $casts = [
+        'amount' => 'decimal:2', 
+    ];
+    
 }

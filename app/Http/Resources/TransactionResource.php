@@ -24,7 +24,7 @@ class TransactionResource extends JsonResource
             'receiver' => new UserResource($this->receiver->user),
             'category' => new TransactionCategoryResource($this->transactionCategory),
             'date' => $this->date,
-            'amount' => $this->amount . " ".$this->sender->currency->name,
+            'amount' => $this->amount,
             'description' => $this->description,
             'status' => $this->status,
         ];
