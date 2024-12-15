@@ -38,7 +38,7 @@ class UserController extends Controller
         ]);
 
     }
-
+    
     public function getAccountTransactions(Account $account)
     {
         $user = Auth::user();
