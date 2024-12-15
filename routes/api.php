@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/accounts', [UserController::class, 'getAccounts']);
     Route::get('/user/accounts/{account}/transactions', [UserController::class, 'getAccountTransactions']);
+    Route::get('/user/profile', [UserController::class, 'profile']);
 });
 
 Route::get('/test', [TestController::class, 'test']);

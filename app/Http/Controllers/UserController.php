@@ -6,9 +6,24 @@ use Illuminate\Http\Request;
 use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\AccountResource;
+use App\Http\Resources\TransactionResource;
 
 class UserController extends Controller
 {
+
+    public function profile()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return new UserResource($user);
+    }
+
     public function getAccounts()
     {
         $user = Auth::user();
@@ -18,7 +33,9 @@ class UserController extends Controller
 
         $accounts = Account::where('owner_id', $user->id)->get();
 
-        return response()->json($accounts);
+        return response()->json([
+            'accounts' => AccountResource::collection($accounts)
+        ]);
 
     }
 
@@ -38,8 +55,10 @@ class UserController extends Controller
         if ($allTransactions->isEmpty()) {
             return response()->json(['message' => 'No transactions found'], 404);
         }
-    
-        return response()->json(['transactions' => $allTransactions], 200);
+
+        return response()->json([
+            'transactions' => TransactionResource::collection($allTransactions)
+        ]);
 
     }
 
