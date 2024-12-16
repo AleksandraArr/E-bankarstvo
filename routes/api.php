@@ -8,6 +8,8 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MoneyTransferController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransactionCategoryController;
+use App\Http\Controllers\CurrencyController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -21,6 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/accounts/{account}/transactions/search', [TransactionController::class, 'search']);
     Route::post('/user/accounts/{sender_account_id}/transfer', [MoneyTransferController::class, 'transfer']);
 });
+
+Route::resource('category', TransactionCategoryController::class)->only(['index', 'show']);
+Route::resource('currency', CurrencyController::class)->only(['index', 'show']);
 
 Route::get('/test', [TestController::class, 'test']);
 
