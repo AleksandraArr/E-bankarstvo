@@ -8,7 +8,8 @@ class TransactionCategory extends Model
 {
  
     protected $fillable = [
-        'name'
+        'type',
+        'description'
     ];
  
     

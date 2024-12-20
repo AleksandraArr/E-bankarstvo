@@ -48,13 +48,6 @@ class AuthController extends Controller
 
     public function logIn(Request $request)
     {
-        /*if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Unauhorized'], 401);
-        }
-        $user = User::where('email', $request['email'])->firstOrFail();
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);*/
 
         $request->validate([
             'email' => 'required|email',

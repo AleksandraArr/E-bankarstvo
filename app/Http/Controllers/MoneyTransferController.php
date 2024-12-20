@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\AccountResource;
 use App\Http\Resources\TransactionResource;
+use Illuminate\Support\Facades\Validator;
 
 class MoneyTransferController extends Controller
 {
@@ -16,12 +17,16 @@ class MoneyTransferController extends Controller
     {
         $user = Auth::user(); 
         
-        $validated = $request->validate([
-            'receiver_account_number' => 'required|string',
+        $validated = Validator::make($request->all(), [
+            'receiver_account_number' => 'required|string|regex:/^[A-Z]{3}\d{10}$/',
             'amount' => 'required|numeric|min:0.01',
             'description' => 'nullable|string|max:255',
             'category_id' => 'nullable|exists:transaction_categories,id',
         ]);
+    
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()], 422);
+        }
 
         $sender = Account::findOrFail($sender_account_id);
 
@@ -96,14 +101,6 @@ class MoneyTransferController extends Controller
                 $sender->balance -= $validated['amount'];
                 $sender->save();
 
-
-                \Log::info('Transaction data:', [
-                    'sender_account' => $sender->id,
-                    'receiver_account' => null,
-                    'receiver_account_number' => $validated['receiver_account_number'],
-                    'amount' => $validated['amount'],
-                    'scope' => 'external',  // Očekuj da 'scope' bude external
-                ]);
                 return Transaction::create([
                     'sender_account' => $sender->id,
                     'receiver_account' => null, 

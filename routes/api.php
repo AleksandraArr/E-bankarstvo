@@ -10,6 +10,7 @@ use App\Http\Controllers\MoneyTransferController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionCategoryController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\AdminController;
 use App\Http\Middleware\EnsureUserIsCorrectType;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -17,8 +18,17 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 
-Route::resource('category', TransactionCategoryController::class)->only(['index', 'show'])
-    ->middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':admin']); 
+Route::middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':admin'])->group(function () {
+    Route::resource('category', TransactionCategoryController::class)->only(['index', 'show']);
+    Route::put('admin/user/{user}', [AdminController::class, 'updateUser']);
+    Route::post('admin/user', [AdminController::class, 'createUser']);
+    Route::post('admin/category', [AdminController::class, 'createTransactionCategory']);
+    Route::put('admin/category/{category}', [AdminController::class, 'updateTransactionCategory']);
+    Route::delete('admin/category/{category}', [AdminController::class, 'deleteTransactionCategory']);
+    Route::post('admin/account', [AdminController::class, 'createAccount']);
+    Route::put('admin/account/{account}', [AdminController::class, 'updateAccount']);
+    Route::delete('admin/account/{account}', [AdminController::class, 'deleteAccount']);
+});
 
 Route::middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':user'])->group(function () {
     Route::get('/user/accounts', [UserController::class, 'getAccounts']);
