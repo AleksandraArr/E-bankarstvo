@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
-use App\Models\Admin;
+use App\Models\Employee;
 class EnsureUserIsCorrectType
 {
     /**
@@ -23,15 +23,15 @@ class EnsureUserIsCorrectType
         }
         
         if ($type === 'user' && ! $user instanceof User) {
-            return redirect('/login');
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        if ($type === 'admin' && ! $user instanceof Admin) {
-            return redirect('/login');
+        if ($type === 'admin' && (! $user instanceof Employee || $user->role !== 'admin')) {
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
     
-        if ($type === 'support' && ! $user instanceof Support) {
-            return redirect('/login');
+        if ($type === 'support' && (! $user instanceof Employee || $user->role !== 'support')) {
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         return $next($request);

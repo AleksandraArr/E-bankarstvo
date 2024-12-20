@@ -3,7 +3,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Admin;
+use App\Models\Employee;
 use App\Rules\PasswordChars;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,7 +56,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
-            $user = Admin::where('email', $request->email)->first();
+            $user = Employee::where('email', $request->email)->first();
         }
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Unauthorized'], 401);
