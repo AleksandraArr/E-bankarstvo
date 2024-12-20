@@ -16,11 +16,10 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::user();
-
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
+        
         return new UserResource($user);
     }
 

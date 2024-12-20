@@ -35,7 +35,7 @@ class TransactionController extends Controller
         if ($request->has('category_id')) {
             $query->where('category_id', '=', $request->query('category_id'));
         }
-
+        
         if ($request->has('receiver_account')) {
             if ($request->query('receiver_account') === $senderId) {
                 return response()->json(['message' => 'Cannot have same receiver and sender'], 404);
@@ -43,6 +43,8 @@ class TransactionController extends Controller
                 $query->where('receiver_account', $request->query('receiver_account'));
             }
         }
+
+        ///uplata isplata
 
         if ($request->has('amount_max')) {
             $query->where('amount', '<=', $request->query('amount_max'));

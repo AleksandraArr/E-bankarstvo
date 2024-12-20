@@ -12,11 +12,13 @@ class Transaction extends Model
     protected $fillable = [
         'sender_account',
         'receiver_account',
+        'receiver_account_number',
         'date',
         'amount',
         'description',
         'status',
-        'category_id'
+        'category_id',
+        'scope'
     ];
 
     public function sender()

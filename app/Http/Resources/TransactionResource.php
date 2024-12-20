@@ -18,15 +18,33 @@ class TransactionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id' => $this->id,
-            'sender' => new UserResource($this->sender->user),
-            'receiver' => new UserResource($this->receiver->user),
-            'category' => new TransactionCategoryResource($this->transactionCategory),
-            'date' => $this->date,
-            'amount' => $this->amount,
-            'description' => $this->description,
-            'status' => $this->status,
-        ];
+        if($this->receiver_account){
+            return [
+                'id' => $this->id,
+                'sender' => new UserResource($this->sender->user),
+                'receiver' => new UserResource($this->receiver->user),
+                'category' => new TransactionCategoryResource($this->transactionCategory),
+                'date' => $this->date,
+                'amount' => $this->amount,
+                'description' => $this->description,
+                'status' => $this->status,
+                'scope' => $this->scope,
+            ];
+        }
+        else{
+            return [
+                'id' => $this->id,
+                'sender' => new UserResource($this->sender->user),
+                'receiver account number' => $this->receiver_account_number,
+                'category' => new TransactionCategoryResource($this->transactionCategory),
+                'date' => $this->date,
+                'amount' => $this->amount,
+                'description' => $this->description,
+                'status' => $this->status,
+                'scope' => $this->scope,
+            ];
+        }
+
+        
     }
 }
