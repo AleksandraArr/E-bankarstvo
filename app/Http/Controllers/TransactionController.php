@@ -13,6 +13,8 @@ class TransactionController extends Controller
 {
     public function search(Request $request, $senderId)
     {
+
+        //senderID, je ID accounta cije se transakcije pretrazuju
         $query = Transaction::where(function ($q) use ($senderId) {
             $q->where('sender_account', $senderId)
             ->orWhere('receiver_account', $senderId);
@@ -35,6 +37,19 @@ class TransactionController extends Controller
         if ($request->has('category_id')) {
             $query->where('category_id', '=', $request->query('category_id'));
         }
+
+        if ($request->has('funds') && $request->query('funds') === 'incoming' && $request->has('receiver_account')) {
+            return response()->json(['message' => 'Cannot have receiver and incoming funds'], 404);
+        }
+
+        if ($request->has('funds')) {
+            $funds = $request->query('funds'); 
+            if ($funds === 'incoming') {
+                $query->where('receiver_account',  $account->id);
+            } elseif ($funds === 'outgoing') {
+                $query->where('sender_account', $account->id);
+            }
+        }
         
         if ($request->has('receiver_account')) {
             if ($request->query('receiver_account') === $senderId) {
@@ -44,7 +59,6 @@ class TransactionController extends Controller
             }
         }
 
-        ///uplata isplata
 
         if ($request->has('amount_max')) {
             $query->where('amount', '<=', $request->query('amount_max'));

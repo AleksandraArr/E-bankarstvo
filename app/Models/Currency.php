@@ -34,10 +34,11 @@ class Currency extends Model
             if (isset($data['status']) && $data['status'] === 'success' && isset($data['rates'][$toCurrency])) {
                 $rate = $data['rates'][$toCurrency]['rate'];
                 $convertedAmount = $rate * $amount;
-
+                $updatedDate = $data['updated_date'] ?? null;
                 return [
                     'rate' => $rate,
-                    'convertedAmount' => $convertedAmount
+                    'convertedAmount' => $convertedAmount,
+                    'updated_date' => $updatedDate
                 ];
             } else {
                 throw new \Exception('Failed to fetch exchange rate.');

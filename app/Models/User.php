@@ -24,8 +24,7 @@ class User extends BaseUser
         'first_name',     
         'last_name',      
         'email',          
-        'password',       
-        'registered_at', 
+        'password'
     ];
 
     /**
@@ -34,8 +33,7 @@ class User extends BaseUser
      * @var list<string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password'
     ];
 
     /**
@@ -46,9 +44,7 @@ class User extends BaseUser
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'registered_at' => 'datetime',
+            'password' => 'hashed'
         ];
     }
 

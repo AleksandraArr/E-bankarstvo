@@ -36,10 +36,8 @@ Route::middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':user'])->gro
     Route::get('/user/profile', [UserController::class, 'profile']);
     Route::get('/user/accounts/{account}/transactions/search', [TransactionController::class, 'search']);
     Route::post('/user/accounts/{sender_account_id}/transfer', [MoneyTransferController::class, 'transfer']);
+    Route::resource('currency', CurrencyController::class)->only(['index', 'show']);
 });
-
-//Route::resource('category', TransactionCategoryController::class)->only(['index', 'show']);
-Route::resource('currency', CurrencyController::class)->only(['index', 'show']);
 
 Route::get('/test', [TestController::class, 'test']);
 
