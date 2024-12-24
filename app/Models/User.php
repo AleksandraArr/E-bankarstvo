@@ -52,4 +52,9 @@ class User extends BaseUser
     {
         return $this->hasMany(Account::class, 'owner_id');
     }
+
+    public function name(): string
+    {
+        return $this->first_name . " " . $this->last_name;
+    }
 }

@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-
+        
         $validator = Validator::make($request->all(), [
             'jmbg' => 'required|string|size:13|unique:users',
             'first_name' => 'required|string|max:50',
@@ -49,15 +49,21 @@ class AuthController extends Controller
     public function logIn(Request $request)
     {
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|string|min:8',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
             $user = Employee::where('email', $request->email)->first();
         }
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }

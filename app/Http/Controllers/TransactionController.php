@@ -7,6 +7,7 @@ use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use PDF;
 
 
 class TransactionController extends Controller
@@ -82,6 +83,54 @@ class TransactionController extends Controller
 
         $transactions = $query->get();
         return response()->json($transactions);
+    }
+
+    public function generatePDF($idTransaction)
+    {
+        $transaction = Transaction::find($idTransaction);
+        $user = Auth::user();
+        if(!$transaction){
+            return response()->json(['message' => 'Transaction does not exists'], 400);
+        }
+
+        if($user->id !== $transaction->owner_id){
+            return response()->json(['message' => 'Unauthorized'], 403); 
+        }
+
+        if ($transaction->receiver_account) {
+            $formattedTransaction = [
+                'title' => 'Transaction report',
+                'date' => date('m/d/Y'),
+                'id' => $transaction->id,
+                'sender' => $transaction->sender->user->name(),
+                'receiver' => $transaction->receiver->user->name(),
+                'receiver_account_number' => $transaction->receiver_account_number,
+                'category' => $transaction->transactionCategory->type,
+                'date' => $transaction->date,
+                'amount' => $transaction->amount,
+                'description' => $transaction->description,
+                'status' => $transaction->status,
+                'scope' => $transaction->scope,
+            ];
+        } else {
+            $formattedTransaction = [
+                'title' => 'Transaction report',
+                'date' => date('m/d/Y'),
+                'id' => $transaction->id,
+                'sender' => $transaction->sender->user->name,
+                'receiver account number' => $transaction->receiver_account_number,
+                'category' => $transaction->transactionCategory->name,
+                'date' => $transaction->date,
+                'amount' => $transaction->amount,
+                'description' => $transaction->description,
+                'status' => $transaction->status,
+                'scope' => $transaction->scope,
+            ];
+        }
+              
+        $pdf = PDF::loadView('transactionPDF', $formattedTransaction);
+       
+        return $pdf->download('transactionreport.pdf');
     }
 
 }

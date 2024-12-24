@@ -30,7 +30,11 @@ class MoneyTransferController extends Controller
     
         $validated = $validator->validated();
 
-        $sender = Account::findOrFail($sender_account_id);
+        $sender = Account::find($sender_account_id);
+
+        if(!$sender){
+            return response()->json(['message' => 'Account not found'], 400);
+        }
 
         if ($sender->owner_id !== $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
