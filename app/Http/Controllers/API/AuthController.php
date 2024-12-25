@@ -16,31 +16,26 @@ class AuthController extends Controller
     {
         
         $validator = Validator::make($request->all(), [
-            'jmbg' => 'required|string|size:13|unique:users',
-            'first_name' => 'required|string|max:50',
-            'last_name' => 'required|string|max:50',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:employees',
             'password' => 'required|string|min:8',
+            'role' =>'required|string|in:support,admin'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        $user = User::create([
-            'jmbg' => $request->jmbg,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
+        $employee = Employee::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'registered_at' => now(),
+            'role' => $request->role
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $employee->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'message' => 'User registered successfully',
-            'user' => $user,
+            'message' => 'Employee registered successfully',
+            'user' => $employee,
             'access_token' => $token,
             'token_type' => 'Bearer'
         ], 201);

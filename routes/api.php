@@ -14,13 +14,16 @@ use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\EnsureUserIsCorrectType;
 
-Route::post('/register', [AuthController::class, 'register']);
+
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 
 Route::middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':admin'])->group(function () {
     Route::resource('category', TransactionCategoryController::class)->only(['index', 'show']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::put('admin/users', [AdminController::class, 'showUsers']);
+    Route::put('admin/accounts', [AdminController::class, 'showAccounts']);
     Route::put('admin/user/{user}', [AdminController::class, 'updateUser']);
     Route::post('admin/user', [AdminController::class, 'createUser']);
     Route::post('admin/category', [AdminController::class, 'createTransactionCategory']);

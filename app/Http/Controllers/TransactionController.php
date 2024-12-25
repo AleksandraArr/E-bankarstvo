@@ -93,39 +93,25 @@ class TransactionController extends Controller
             return response()->json(['message' => 'Transaction does not exists'], 400);
         }
 
-        if($user->id !== $transaction->owner_id){
+        if($user->id !== $transaction->sender->user->id){
             return response()->json(['message' => 'Unauthorized'], 403); 
         }
 
+        $formattedTransaction = [
+            'title' => 'Transaction report',
+            'date' => date('m/d/Y'),
+            'id' => $transaction->id,
+            'sender' => $transaction->sender->user->name(),
+            'receiver_account_number' => $transaction->receiver_account_number,
+            'category' => $transaction->transactionCategory->type,
+            'date' => $transaction->date,
+            'amount' => $transaction->amount,
+            'description' => $transaction->description,
+            'status' => $transaction->status,
+            'scope' => $transaction->scope,
+        ];
         if ($transaction->receiver_account) {
-            $formattedTransaction = [
-                'title' => 'Transaction report',
-                'date' => date('m/d/Y'),
-                'id' => $transaction->id,
-                'sender' => $transaction->sender->user->name(),
-                'receiver' => $transaction->receiver->user->name(),
-                'receiver_account_number' => $transaction->receiver_account_number,
-                'category' => $transaction->transactionCategory->type,
-                'date' => $transaction->date,
-                'amount' => $transaction->amount,
-                'description' => $transaction->description,
-                'status' => $transaction->status,
-                'scope' => $transaction->scope,
-            ];
-        } else {
-            $formattedTransaction = [
-                'title' => 'Transaction report',
-                'date' => date('m/d/Y'),
-                'id' => $transaction->id,
-                'sender' => $transaction->sender->user->name,
-                'receiver account number' => $transaction->receiver_account_number,
-                'category' => $transaction->transactionCategory->name,
-                'date' => $transaction->date,
-                'amount' => $transaction->amount,
-                'description' => $transaction->description,
-                'status' => $transaction->status,
-                'scope' => $transaction->scope,
-            ];
+           $formattedTransaction['receiver'] = $transaction->receiver->user->name();
         }
               
         $pdf = PDF::loadView('transactionPDF', $formattedTransaction);

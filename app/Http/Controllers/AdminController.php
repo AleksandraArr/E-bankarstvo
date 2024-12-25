@@ -13,6 +13,24 @@ use App\Http\Resources\AccountResource;
 
 class AdminController extends Controller
 {
+    public function showUsers()
+    {
+        $users = User::all();
+    
+        return response()->json([
+            'users' => UserResource::collection($users)
+        ]);
+    }
+
+    public function showAccounts()
+    {
+        $accounts = Account::all();
+    
+        return response()->json([
+            'accounts' => AccountResource::collection($accounts)
+        ]);
+    }
+
     public function createUser(Request $request)
     {
 
@@ -21,8 +39,7 @@ class AdminController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8',
-            'registered_at' => 'nullable|date',
+            'password' => 'required|string|min:8'
         ]);
 
         if ($validator->fails()) {
@@ -34,9 +51,10 @@ class AdminController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'registered_at' => $request->registered_at ?? now(), 
+            'password' => bcrypt($request->password)
         ]);
+
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'User created successfully.',
