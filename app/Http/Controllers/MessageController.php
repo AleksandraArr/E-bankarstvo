@@ -37,7 +37,7 @@ class MessageController extends Controller
     public function showForUser()
     {
         $user = Auth::user();
-        $messages = Message::where('user_id', $user->id)->get();
+        $messages = $user->messages;
         return response()->json(['messages' => MessageResource::collection($messages)]);
     }
 
@@ -46,6 +46,19 @@ class MessageController extends Controller
         $messages = Message::all();
         return response()->json([
             'messages' => MessageResource::collection($messages)
+        ]);
+    }
+
+    public function show($id)
+    {
+        $message = Message::find($id);
+
+        if (!$message) {
+            return response()->json(['message' => 'Message not found'], 404);
+        }
+
+        return response()->json([
+            'transaction category' => new MessageResource($message) 
         ]);
     }
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\BaseUser;
+use App\Models\Message;
 class Employee extends BaseUser
 {
 
@@ -20,4 +21,9 @@ class Employee extends BaseUser
     protected $hidden = [
         'password', 
     ];
+
+    public function messages() : HasMany
+    {
+        return $this->hasMany(Message::class, 'reviewed_by');
+    }
 }

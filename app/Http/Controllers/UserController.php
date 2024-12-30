@@ -17,9 +17,6 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::user();
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
         
         return new UserResource($user);
     }
@@ -27,9 +24,6 @@ class UserController extends Controller
     public function getAccounts()
     {
         $user = Auth::user();
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
 
         $accounts = Account::where('owner_id', $user->id)->get();
 
@@ -53,7 +47,7 @@ class UserController extends Controller
         $allTransactions = $sentTransactions->merge($receivedTransactions);
     
         if ($allTransactions->isEmpty()) {
-            return response()->json(['message' => 'No transactions found'], 404);
+            return response()->json(['message' => 'No transactions found'], 200);
         }
 
         return response()->json([

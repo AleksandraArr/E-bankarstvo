@@ -22,8 +22,8 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 Route::middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':admin'])->group(function () {
     Route::resource('category', TransactionCategoryController::class)->only(['index', 'show']);
     Route::post('/register', [AuthController::class, 'register']);
-    Route::put('admin/users', [AdminController::class, 'showUsers']);
-    Route::put('admin/accounts', [AdminController::class, 'showAccounts']);
+    Route::get('admin/users', [AdminController::class, 'showUsers']);
+    Route::get('admin/accounts', [AdminController::class, 'showAccounts']);
     Route::put('admin/user/{user}', [AdminController::class, 'updateUser']);
     Route::post('admin/user', [AdminController::class, 'createUser']);
     Route::post('admin/category', [AdminController::class, 'createTransactionCategory']);

@@ -21,10 +21,6 @@ class TransactionController extends Controller
             ->orWhere('receiver_account', $senderId);
         });
         $user = Auth::user();
-
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
         $account = Account::find($senderId);
 
         if (!$account) {

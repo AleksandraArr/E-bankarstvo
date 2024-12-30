@@ -27,7 +27,7 @@ class AccountSeeder extends Seeder
             Account::create([
                 'owner_id' => $user->id,
                 'currency_id' => $rsdCurrency->id,
-                'account_number' => 'RS' . rand(1000000000, 9999999999),
+                'account_number' => 'RSD' . rand(1000000000, 9999999999),
                 'type' => 'rsd account',
                 'balance' => rand(1000, 10000),
             ]);
