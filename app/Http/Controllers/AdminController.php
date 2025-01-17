@@ -123,18 +123,15 @@ class AdminController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'type' => 'required|string|max:255|unique:transaction_categories,type,' . $category->id,
-            'description' => 'required|string|max:500',
+            'type' => 'nullable|string|max:255|unique:transaction_categories,type,' . $category->id,
+            'description' => 'nullable|string|max:500',
         ]);
     
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
     
-        $category->update([
-            'type' => $request->type,
-            'description' => $request->description,
-        ]);
+        $category->update($request->only(['type', 'description']));
     
         return response()->json([
             'message' => 'Category successfully updated.',
@@ -160,7 +157,8 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), [
             'owner_id' => 'required|exists:users,id',
             'currency_id' => 'required|exists:currencies,id',
-            'account_number' => 'required|string|unique:accounts,account_number',
+            'account_number' => 
+            'required|string|unique:accounts,account_number|regex:/^[A-Z]{3}\d{10}$/',
             'type' => 'required|string|max:255',
             'balance' => 'required|numeric|min:0',
         ]);

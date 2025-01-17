@@ -31,7 +31,7 @@ class MessageController extends Controller
             'status' => 'pending'
         ]);
 
-        return response()->json(['message' => 'Message created successfully!', 'data' => $message]);
+        return response()->json(['message' => 'Message created successfully!', 'data' => new MessageResource($message)]);
     }
 
     public function showForUser()
@@ -44,6 +44,11 @@ class MessageController extends Controller
     public function index()
     {
         $messages = Message::all();
+        if ($messages->isEmpty()) {
+            return response()->json([
+                'message' => 'No message found'
+            ], 404);
+        }    
         return response()->json([
             'messages' => MessageResource::collection($messages)
         ]);
@@ -58,12 +63,17 @@ class MessageController extends Controller
         }
 
         return response()->json([
-            'transaction category' => new MessageResource($message) 
+            'message' => new MessageResource($message) 
         ]);
     }
 
     public function showUnsolved(){
         $messages = Message::where('status', 'pending')->get();
+        if ($messages->isEmpty()) {
+            return response()->json([
+                'message' => 'No unsolved messages'
+            ], 404);
+        }
         return response()->json(['messages' => MessageResource::collection($messages)]);
     }
 

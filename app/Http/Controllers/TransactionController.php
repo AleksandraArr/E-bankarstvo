@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Account;
 use App\Models\Transaction;
+use App\Http\Resources\TransactionResource;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use PDF;
@@ -56,12 +57,11 @@ class TransactionController extends Controller
             }
         }
 
-
-        if ($request->has('amount_max')) {
+        if ($request->has('amount_max') && is_numeric($request->query('amount_max'))) {
             $query->where('amount', '<=', $request->query('amount_max'));
         }
-
-        if ($request->has('amount_min')) {
+    
+        if ($request->has('amount_min') && is_numeric($request->query('amount_min'))) {
             $query->where('amount', '>=', $request->query('amount_min'));
         }
 
@@ -78,7 +78,9 @@ class TransactionController extends Controller
         }
 
         $transactions = $query->get();
-        return response()->json($transactions);
+        return response()->json([
+            'transactions' => TransactionResource::collection($transactions)
+        ]);
     }
 
     public function generatePDF($idTransaction)
