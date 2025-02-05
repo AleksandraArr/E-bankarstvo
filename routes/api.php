@@ -47,7 +47,7 @@ Route::middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':user'])->gro
 });
 
 Route::middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':support'])->group(function () {
-    Route::resource('support/messages', MessageController::class)->only(['index', 'show']);
+    Route::resource('/support/messages', MessageController::class)->only(['index', 'show']);
     Route::get('/support/messages/unsolved', [MessageController::class, 'showUnsolved']);
     Route::put('/support/messages/{message}/solve', [MessageController::class, 'markAsSolved']);
 });

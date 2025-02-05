@@ -54,20 +54,32 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
-
         if (!$user) {
             $user = Employee::where('email', $request->email)->first();
         }
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+        if (!$user) {
+            return response()->json(['message' => 'Invalid email or password'], 401);
         }
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Invalid password'], 401);
+        }
+    
+        if ($user instanceof User) {
+            $userType = "user";
+        }
+        else{
+            $userType = $user->role;
+        }
+
     
         $token = $user->createToken('auth_token')->plainTextToken;
     
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
+            'user_type'    => $userType,
         ]);
     }
     
