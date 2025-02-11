@@ -23,6 +23,7 @@ class TransactionResource extends JsonResource
                 'id' => $this->id,
                 'sender' => new UserResource($this->sender->user),
                 'receiver' => new UserResource($this->receiver->user),
+                'receiver_account_number' => $this->receiver->account_number,
                 'category' => new TransactionCategoryResource($this->transactionCategory),
                 'date' => $this->date,
                 'amount' => $this->amount,
@@ -35,7 +36,7 @@ class TransactionResource extends JsonResource
             return [
                 'id' => $this->id,
                 'sender' => new UserResource($this->sender->user),
-                'receiver account number' => $this->receiver_account_number,
+                'receiver_account_number' => $this->receiver_account_number,
                 'category' => new TransactionCategoryResource($this->transactionCategory),
                 'date' => $this->date,
                 'amount' => $this->amount,

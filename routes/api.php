@@ -17,6 +17,7 @@ use App\Http\Middleware\EnsureUserIsCorrectType;
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::resource('currency', CurrencyController::class)->only(['index', 'show']);
 
 
 Route::middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':admin'])->group(function () {
@@ -41,7 +42,6 @@ Route::middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':user'])->gro
     Route::get('/user/accounts/{account}/transactions/search', [TransactionController::class, 'search']);
     Route::get('/user/transactions/{transaction}/print', [TransactionController::class, 'generatePDF']);
     Route::post('/user/accounts/{sender_account_id}/transfer', [MoneyTransferController::class, 'transfer']);
-    Route::resource('currency', CurrencyController::class)->only(['index', 'show']);
     Route::get('/user/messages', [MessageController::class, 'showForUser']);
     Route::post('/user/messages', [MessageController::class, 'create']);
 });

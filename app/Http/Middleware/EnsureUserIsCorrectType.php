@@ -19,11 +19,11 @@ class EnsureUserIsCorrectType
         $user = $request->user();
 
         if (!$user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Unauthorized user1'], 401);
         }
         
         if ($type === 'user' && ! $user instanceof User) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Unauthorized user'], 401);
         }
 
         if ($type === 'admin' && (! $user instanceof Employee || $user->role !== 'admin')) {
