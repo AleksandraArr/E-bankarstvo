@@ -50,11 +50,17 @@ class TransactionController extends Controller
         }
         
         if ($request->has('receiver_account')) {
-            if ($request->query('receiver_account') === $senderId) {
+            $receiverAccountNumber = $request->query('receiver_account');
+            if ($receiverAccountNumber === $account->account_number) {
                 return response()->json(['message' => 'Cannot have same receiver and sender'], 404);
-            } else {
-                $query->where('receiver_account', $request->query('receiver_account'));
+            } 
+            $receiverAccount = Account::where('account_number', $receiverAccountNumber)->first();
+
+            if (!$receiverAccount) {
+                return response()->json(['message' => 'Receiver account not found'], 404);
             }
+        
+            $query->where('receiver_account', $receiverAccount->id);
         }
 
         if ($request->has('amount_max') && is_numeric($request->query('amount_max'))) {

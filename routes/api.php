@@ -18,10 +18,9 @@ use App\Http\Middleware\EnsureUserIsCorrectType;
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 Route::resource('currency', CurrencyController::class)->only(['index', 'show']);
-
+Route::resource('category', TransactionCategoryController::class)->only(['index', 'show']);
 
 Route::middleware(['auth:sanctum', EnsureUserIsCorrectType::class.':admin'])->group(function () {
-    Route::resource('category', TransactionCategoryController::class)->only(['index', 'show']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::get('admin/users', [AdminController::class, 'showUsers']);
     Route::get('admin/accounts', [AdminController::class, 'showAccounts']);

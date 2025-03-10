@@ -137,7 +137,7 @@ class MoneyTransferController extends Controller
                         'sender_account' => $sender->id,
                         'receiver_account' => $receiver->id,
                         'receiver_account_number' => $receiver->account_number,
-                        'amount' => $convertedAmount,
+                        'amount' => $validated['amount'],
                         'date' => now(),
                         'description' => $validated['description'],
                         'status' => 'successful',

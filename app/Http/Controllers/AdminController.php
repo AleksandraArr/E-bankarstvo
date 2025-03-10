@@ -43,7 +43,7 @@ class AdminController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
         $user = User::create([
@@ -99,7 +99,7 @@ class AdminController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
     
@@ -128,7 +128,7 @@ class AdminController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
     
         $category->update($request->only(['type', 'description']));

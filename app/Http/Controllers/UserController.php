@@ -45,7 +45,7 @@ class UserController extends Controller
         $receivedTransactions = $account-> transaction_receivers()->get();
     
         $allTransactions = $sentTransactions->merge($receivedTransactions);
-    
+        $allTransactions = $allTransactions->sortBy('created_at');
         if ($allTransactions->isEmpty()) {
             return response()->json(['message' => 'No transactions found'], 200);
         }
