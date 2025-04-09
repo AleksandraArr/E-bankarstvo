@@ -104,7 +104,7 @@ class MoneyTransferController extends Controller
             ], 200);
 
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Transfer failed', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Transfer failed', 'errors' => $e->getMessage()], 500);
         }
     }
 
@@ -152,11 +152,11 @@ class MoneyTransferController extends Controller
                 ], 200);
     
             } catch (\Exception $e) {
-                return response()->json(['message' => 'Exchange transfer failed', 'error' => $e->getMessage()], 500);
+                return response()->json(['message' => 'Exchange transfer failed', 'errors' => $e->getMessage()], 500);
             }
     
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Error fetching exchange rate', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Error fetching exchange rate', 'errors' => $e->getMessage()], 500);
         }
         
     }
@@ -187,7 +187,7 @@ class MoneyTransferController extends Controller
             ], 200);
 
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Transfer failed', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Transfer failed', 'errors' => $e->getMessage()], 500);
         }
     }
 }

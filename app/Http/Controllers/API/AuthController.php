@@ -59,11 +59,11 @@ class AuthController extends Controller
         }
 
         if (!$user) {
-            return response()->json(['message' => 'Invalid email or password'], 401);
+            return response()->json(['errors' => 'Invalid email or password'], 401);
         }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid password'], 401);
+            return response()->json(['errors' => 'Invalid password'], 401);
         }
     
         if ($user instanceof User) {
