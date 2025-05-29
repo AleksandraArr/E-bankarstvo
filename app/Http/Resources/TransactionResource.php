@@ -24,6 +24,7 @@ class TransactionResource extends JsonResource
                 'sender_account'=> new AccountResource($this->sender),
                 'sender' => new UserResource($this->sender->user),
                 'receiver' => new UserResource($this->receiver->user),
+                'receiver_account' => new AccountResource($this->receiver),
                 'receiver_account_number' => $this->receiver->account_number,
                 'category' => new TransactionCategoryResource($this->transactionCategory),
                 'date' => $this->date,
